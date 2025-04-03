@@ -7,12 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="root" class="body-incontainer">
-        <header id="header" class="header"></header>
-        <main id="main" class="main">
+    <main id="root" class="body-incontainer">
+        <section id="main" class="main">
+            <form action="/send-data" class="form">
+                <fieldset class="table-fieldset">
+                    <legend><strong>Select Table</strong></legend>
+                        <select name="table-select" id="table-select" class="input-table-select" required>
+                        </select>
+                </fieldset>
 
-        </main>
-        <footer id="footer" class="footer"></footer>
-    </div>
+                
+                <fieldset class="attribute-fieldset" required>
+                    <legend><strong>Select Attribute / Row</strong></legend>
+                    <div class="attribute-select" id="attribute-select"></div>
+                </fieldset>
+                <button class="get-data-btn" id="get-data-btn">SUBMIT</button>
+            </form>
+        </section>
+        <section>
+
+        </section>
+    </main>
+
+    <script src="./index.js"></script>
 </body>
 </html>

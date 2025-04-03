@@ -1,0 +1,14 @@
+[
+    {
+        "tableName" : "table1",
+        "attributes" : ["1col1", "1col2", "1col3"]
+    },
+    {
+        "tableName" : "table2",
+        "attributes" : ["2col1", "2col2", "2col3"]
+    },
+    {
+        "tableName" : "table3",
+        "attributes" : ["3col1", "3col2", "3col3"]
+    }
+]
