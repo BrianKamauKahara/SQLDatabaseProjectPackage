@@ -20,6 +20,7 @@ const poolPromise = new sql.ConnectionPool(dbConfig)
     .connect()
     .then((pool) => {
         console.log("Connected to Pool")
+        return pool
     })
     .catch((error) => {
         console.error("DATABASE CONNECTION FAILED!",error)
