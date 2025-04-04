@@ -1,54 +1,52 @@
 const selectTableEl = document.getElementById('table-select')
 const selectAttributeEl = document.getElementById('attribute-select')
+const tableFormEl = document.getElementById('table-form')
+const downloadSection = document.getElementById('download-btn-container')
+const downloadAnchor = document.getElementById('a-download')
+
+import { 
+    fetchExistingTables,
+    fetchAndSaveTableData, 
+    getTableAttributes, 
+    getTableEls, 
+    getAttributeEls 
+} from './ss-functions.js'
 
 document.addEventListener('DOMContentLoaded', main)
 
-async function getTableData() {
-    try {
-        const response = await fetch('/tables')
-        const tableData = await response.json()
-        return tableData
-    }
-    catch (error) {
-        console.log(error)
-        return null
-    }
-}
-
-async function getAttributesData(tableData, selectedTable) {
-    const foundTable = tableData.find((table) => table.tableName === selectedTable)
-    return foundTable.attributes
-}
-
-function getTableEls(tableData) {
-        return tableData.map(table => {
-            return `<option class='option' value='${table.tableName}'>${table.tableName}</option>`
-        }).join('')
-}
-
-function getAttributeEls(attributes) {
-    return attributes.map(attribute => 
-    `
-        <label>
-            <input type='checkbox' class='option' value='${attribute}'>${attribute}</input>
-        </label>
-    `
-    ).join('')
-}
-
 async function getAndDisplayTables() {
-    const tableData = await getTableData()
+    const tableData = await fetchExistingTables()
     const tableEls = getTableEls(tableData)
-    selectTableEl.innerHTML=tableEls
+    selectTableEl.innerHTML = tableEls
 
     return tableData
 }
 
-async function getAndDisplayAttributes (tableData) {
+async function getAndDisplayAttributes(tableData) {
     const selectedTable = selectTableEl.value
-    const tableAttributes = await getAttributesData(tableData, selectedTable)
+    const tableAttributes = await getTableAttributes(tableData, selectedTable)
     const attributeEls = getAttributeEls(tableAttributes)
-    selectAttributeEl.innerHTML=attributeEls
+    selectAttributeEl.innerHTML = attributeEls
+}
+
+async function makeCsvDownloadable(e) {
+    e.preventDefault()
+    
+    // Trigger fetching the csv based on the user's input
+    const formData = new FormData(e.target)
+    const tableSelected = formData.get('table')
+    const attributesSelectedString = formData.getAll('attribute').join(', ')
+    
+    try {
+        const csvFilePath = await fetchAndSaveTableData(tableSelected, attributesSelectedString) 
+        downloadAnchor.href = `/csv/${encodeURIComponent(csvFilePath)}`
+        if(downloadSection.classList.contains('hidden')) {
+            downloadSection.classList.remove('hidden')
+        }
+    } catch (error) {
+        console.log(error)
+        return
+    }
 }
 
 async function main () {
@@ -57,8 +55,14 @@ async function main () {
     const tableData = await getAndDisplayTables() 
     await getAndDisplayAttributes(tableData)
 
-    selectTableEl.addEventListener('change',async () => {
+    selectTableEl.addEventListener('change', async () => {
         await getAndDisplayAttributes(tableData)
     })
+
+    tableFormEl.addEventListener('submit', async (e) => {
+        makeCsvDownloadable(e)
+    })
+
+
 }
 

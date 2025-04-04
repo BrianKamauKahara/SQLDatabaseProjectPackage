@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none !important;
+}
+
 body {
     font-family: Arial, sans-serif;
     min-width: 100vw;
@@ -90,8 +94,23 @@ body {
     height: 2rem;
 }
 
+
 .get-data-btn {
     width: 100%;
     padding: 0 2px;
     margin: 10px auto;
+}
+
+
+.download-btn-container {
+    width:  100%;
+    background-color: rgba(170, 170, 170, 0.295);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.download-data-btn {
+    width: 100%;
+    padding: 0, 10px;
 }
