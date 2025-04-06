@@ -8,34 +8,34 @@
 </head>
 <body>
     <main id="main" class="main">
-        <section id="login-container" class="form-container">
-            <form action="" class="form" id="login-form">
-                <h1 class="sign-in">Sign Up</h1>
+        <section id="sign-up-container" class="form-container">
+            <form action="" class="form" id="sign-up-form">
+                <h1 class="sign-up">Sign Up</h1>
                 <fieldset class="input-fs">
                     <legend>Association Name</legend>
                     <label for="user-name"></label>
-                    <input type="text" class="user-name" id="user-name" name="user-name" required placeholder="User Name">
+                    <input type="text" id="association-name" name="association-name" required placeholder="A001" value="A001">
                 </fieldset>
                 <fieldset class="input-fs">
                     <legend>Location</legend>
                     <label for="user-name"></label>
-                    <input type="text" class="user-name" id="user-name" name="user-name" required placeholder="User Name">
+                    <input type="text" id="location" name="location" required placeholder="Kenya" value="Kario">
                 </fieldset>
                 <fieldset class="input-fs">
                     <legend>Population</legend>
                     <label for="user-name"></label>
-                    <input type="text" class="user-name" id="user-name" name="user-name" required placeholder="User Name">
+                    <input type="number" id="popolation" name="population" required placeholder="20" value="12">
                 </fieldset>
                 <fieldset class="input-fs">
                     <legend>Chairperson</legend>
                     <label for="user-name"></label>
-                    <input type="text" class="user-name" id="user-name" name="user-name" required placeholder="User Name">
+                    <input type="text" id="chairperson" name="chairperson" required placeholder="Dr / ENG / Prof..." value="Mr. Karas">
                 </fieldset>
 
                 <fieldset class="input-fs">
                     <legend>Password</legend>
                     <label for="password"></label>
-                    <input type="password" class="password" id="password" name="password" required placeholder="password">
+                    <input type="password" id="password" name="password" required placeholder="password">
                 </fieldset>
 
                 <div class="bottom">
@@ -45,5 +45,6 @@
             </form>
         </section>
     </main>
+    <script src="./sign-up.js" type="module"></script>
 </body>
 </html>

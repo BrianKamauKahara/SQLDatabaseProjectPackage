@@ -53,6 +53,7 @@ async function main () {
     // Function fetches for the available tables and displays them. 
     // Also displays the rows 
     const tableData = await getAndDisplayTables() 
+    console.log(tableData)
     await getAndDisplayAttributes(tableData)
 
     selectTableEl.addEventListener('change', async () => {

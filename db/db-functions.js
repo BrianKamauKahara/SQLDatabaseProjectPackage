@@ -1,25 +1,12 @@
-require('dotenv').config()
 const { writeFileSync } = require('fs')
 const { resolve } = require('path')
 
 const sql = require('mssql')
 
-const { USER, PASSWORD, SERVER, DATABASE, PORT } = process.env
-
-const dbConfig = {
-    user: USER,
-    password: PASSWORD,
-    server: SERVER,
-    database: DATABASE,
-    port: parseInt(PORT),
-    options: {
-        encrypt: false,
-        trustServerCertificate: true
-    }
-}
 
 // CONNECTION POOL
-const poolPromise = new sql.ConnectionPool(dbConfig)
+async function connectToDB(dbConfig) {
+    return new sql.ConnectionPool(dbConfig)
     .connect()
     .then((pool) => {
         console.log("Connected to Database")
@@ -28,12 +15,11 @@ const poolPromise = new sql.ConnectionPool(dbConfig)
     .catch((error) => {
         console.error("DATABASE CONNECTION FAILED!", error)
     })
+}
 
-
-
-async function getTables () {
+async function getTables (dbConfig) {
     // Establish a connection with the database
-    const pool = await poolPromise
+    const pool = await connectToDB(dbConfig)
 
     // Fetch all tables and their attributes
     const result = await pool.request().query(`
@@ -68,9 +54,9 @@ async function getTables () {
     return tableData
 }
 
-async function getDataInAndSaveTable(tableName, attributesString) {
+async function getDataInAndSaveTable(dbConfig, tableName, attributesString) {
     // Connect to a connection pool / instantiate a pool
-    const pool = await poolPromise
+    const pool = await connectToDB(dbConfig)
 
     // Get the specified table with the selected attributes
     const queryStr = `
@@ -101,4 +87,4 @@ async function makeCsvFile(data) {
     }
 
 
-module.exports = { getTables, getDataInAndSaveTable }
+module.exports = { getTables, getDataInAndSaveTable, connectToDB }
