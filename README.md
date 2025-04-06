@@ -32,8 +32,8 @@
 
 
 ## How to Install
-    - This project is meant to work on a local machine. You can clone this project and run it on your local machine
-    - Make sure your Microsoft SQL Server is configured to allow you to connect to it. You can use AI to help you, because this procedure may vary from person to person
+This project is meant to work on a local machine. You can clone this project and run it on your local machine 
+Make sure your Microsoft SQL Server is configured to allow you to connect to it. You can use AI to help you, because this procedure may vary from person to person
 
 
 1. Clone the project from GitHub and run:
@@ -42,6 +42,7 @@
    npm install
 
 2. Add a .env file in the root directory and specify the following items:
+   ```bash
     SERVER_PORT= // whichever you wish
     USER= // a user with SELECT rights in your MSSQL server
     PASSWORD= // the user's password
@@ -49,9 +50,9 @@
     DATABASE= // the database's name
     PORT=1433 // the default port for TCP/IP connection to MS SQL database
 
-3. In the terminal, run:
+4. In the terminal, run:
     ```bash
-   npm run 
+   npm run start
    ```
 
    or
@@ -59,7 +60,11 @@
    ```bash
    npm start
    ```
+   This will start up the server. After seeing 'Connected to Database' on your terminal, all is well. To view your page, open localhost:5000 or whichever port number you chose
+   
 - Success! Provided the details you supplied are correct, and your SQL Server is configured for both Windows authentication and SQL Server authentication, you should now be able to select data from any tables in your database.
+
+
 
 
 
