@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBS PROJECT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="root" class="body-incontainer">
+        <section id="main" class="main">
+            <form class="form" id="table-form">
+                <fieldset class="table-fieldset">
+                    <legend><strong>Select Table</strong></legend>
+                        <select name="table" id="table-select" class="input-table-select" required>
+                        </select>
+                </fieldset>
+
+                <fieldset class="name" required>
+                    <legend><strong>Select Attribute / Row</strong></legend>
+                    <div class="attribute-select" id="attribute-select"></div>
+                </fieldset>
+                <button class="get-data-btn" id="get-data-btn" type="submit">SUBMIT</button>
+                <div class="download-btn-container hidden" id="download-btn-container">
+                    <a id="a-download" href="" download>
+                        <button class="dowload-data-btn" type="button">Download as CSV</button>
+                    </a>
+                </div>
+            </form>
+        </section>
+        <section>
+
+        </section>
+    </main>
+
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
