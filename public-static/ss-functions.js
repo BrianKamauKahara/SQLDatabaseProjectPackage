@@ -120,3 +120,26 @@ export async function navigate(page) {
 export async function storeLocalStorage(heeh) {
     return 0;
 }
+
+export async function customQueryExecutor(formData) {
+    const query = formData.get('custom-query').trim()
+
+    if (!query) {
+        return null
+    }
+
+    const result = await fetch('/db/custom', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            query
+        })
+    })
+
+    const data = await result.json()
+    console.log(data)
+    return data
+}

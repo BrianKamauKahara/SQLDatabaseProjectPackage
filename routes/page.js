@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/default-user-page', async (req, res) => {
-    if (!req.session.user) {
+    /* if (!req.session.user) {
         return res.status(401).sendFile(path.join(__dirname,ps,'error', 'error.html'))
-    }
+    } */
     return res.status(200).sendFile(path.join(__dirname, ps,'default-user', 'user.html'));
 })
 
@@ -33,10 +33,9 @@ router.get('/sign-up-page', async (req, res) => {
 })
 
 router.get('/admin-page', async (req, res) => {
-    if (!req.session.user) {
-        console.log(__dirname)
+    /* if (!req.session.user) {
         return res.status(401).sendFile(path.join(__dirname,ps,'error', 'error.html'))
-    }
+    } */
     return res.status(200).sendFile(path.join(__dirname,ps,'admin', 'admin.html'));
 })
 

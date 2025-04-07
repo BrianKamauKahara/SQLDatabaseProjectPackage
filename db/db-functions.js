@@ -85,7 +85,19 @@ async function makeCsvFile(data) {
     } else {
         return null
     }
+}
+
+async function getDataFromCustomQuery(dbConfig, query) {
+    const pool = await connectToDB(dbConfig)
+
+    try {
+        const result = await pool.request().query(query)
+        const data = result.recordset
+        const csvFilePath = await makeCsvFile(data)
+        return csvFilePath
+    } catch (error) {
+        throw error
     }
+}
 
-
-module.exports = { getTables, getDataInAndSaveTable, connectToDB }
+module.exports = { getTables, getDataInAndSaveTable, connectToDB, getDataFromCustomQuery }

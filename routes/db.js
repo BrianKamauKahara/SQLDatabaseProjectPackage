@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const { 
     getTables,
-    getDataInAndSaveTable
+    getDataInAndSaveTable,
+    getDataFromCustomQuery
 } = require('../db/db-functions.js')
 const dbConfig = require('../db/get-admin-details.js')
 
@@ -57,6 +58,36 @@ router.get("/tables", async (req, res) => {
             data: {
                 error: error.name,
                 message: error.message
+            }
+        })
+    }
+})
+
+router.post("/custom", async(req, res) => {
+    /* if(!req.session.user === 'admin') {
+        return res.status(401).json({
+            success: false,
+            data: {
+                error: "Unauthorized Request",
+                message: "Only Executable by admins"
+            }
+        })
+    } */
+    const query = req.body.query
+    try {
+        const csvFilePath = await getDataFromCustomQuery(dbConfig, query)
+        return res.status(200).json({
+            success: true,
+            data: {
+                csvFilePath: csvFilePath
+        }})
+    } catch (error) {
+        return res.status(404).json({
+            success: false,
+            data: {
+                error: error.name,
+                message: error.message,
+                all: error.all
             }
         })
     }

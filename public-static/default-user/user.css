@@ -21,7 +21,6 @@ body {
 
 .body-incontainer {
     min-height: 80vh;
-    max-height: 100vh;
     padding: 40px 20px;
     width: 960px;
     display: flex;

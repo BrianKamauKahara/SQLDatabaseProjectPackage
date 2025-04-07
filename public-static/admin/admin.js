@@ -1,69 +1,75 @@
-const selectTableEl = document.getElementById('table-select')
-const selectAttributeEl = document.getElementById('attribute-select')
-const tableFormEl = document.getElementById('table-form')
-const downloadSection = document.getElementById('download-btn-container')
-const downloadAnchor = document.getElementById('a-download')
-
 import { 
-    fetchExistingTables,
-    fetchAndSaveTableData, 
-    getTableAttributes, 
-    getTableEls, 
-    getAttributeEls 
+    customQueryExecutor
 } from '../ss-functions.js'
+
+const customQueryForm = document.getElementById('custom-query-form')
+const aiQueryForm = document.getElementById('ai-query-form')
+const downloadCustomEl = document.getElementById('download-custom-btn-container') 
+const downloadAiEl = document.getElementById('download-ai-btn-container') 
+const customInputArea = document.getElementById('custom-query-input')
+const AiInputArea = document.getElementById('ai-query-input')
+const customStatusEl = document.getElementById('query-status-custom')
+const aiStatusEl = document.getElementById('query-status-ai')
+const downloadAnchor = document.getElementById('a-download')
 
 document.addEventListener('DOMContentLoaded', main)
 
-async function getAndDisplayTables() {
-    const tableData = await fetchExistingTables()
-    const tableEls = getTableEls(tableData)
-    selectTableEl.innerHTML = tableEls
-
-    return tableData
-}
-
-async function getAndDisplayAttributes(tableData) {
-    const selectedTable = selectTableEl.value
-    const tableAttributes = await getTableAttributes(tableData, selectedTable)
-    const attributeEls = getAttributeEls(tableAttributes)
-    selectAttributeEl.innerHTML = attributeEls
-}
-
-async function makeCsvDownloadable(e) {
-    e.preventDefault()
-    
-    // Trigger fetching the csv based on the user's input
-    const formData = new FormData(e.target)
-    const tableSelected = formData.get('table')
-    const attributesSelectedString = formData.getAll('attribute').join(', ')
-    
-    try {
-        const csvFilePath = await fetchAndSaveTableData(tableSelected, attributesSelectedString) 
-        downloadAnchor.href = `/docs/csv/${encodeURIComponent(csvFilePath)}`
-        if(downloadSection.classList.contains('hidden')) {
-            downloadSection.classList.remove('hidden')
-        }
-    } catch (error) {
-        console.log(error)
-        return
+function toggleState(state, statusEl) {
+    let color;
+    let text;
+    switch (state) {
+        case 'fetching':
+            color = 'orange'; 
+            text = 'fetching'
+            break;
+        case 'error':
+            color = 'red'; 
+            text = 'error'
+            break;
+        case 'success':
+            color = 'green'; 
+            text = 'success'
+            break;
+        default:
+            color = 'gray'; 
+            break;
     }
+
+    statusEl.style.backgroundColor = color
+    statusEl.textContent = text
+
+}
+
+function successfulQuery(downloadEl, result, statusEl) {
+    if (!result.data.csvFilePath) {
+        customInputArea.textContent = "Trust Me it Worked! No output provided from the given SQL statement"
+    }
+    if(downloadEl.classList.contains('hidden')) {
+        downloadEl.classList.remove('hidden')
+    }
+    const path = `/docs/csv/${encodeURIComponent(result.data.csvFilePath)}`
+    console.log(path)
+    downloadAnchor.href = path
+    toggleState('success', statusEl)
+}
+
+function unsuccessfulQuery(inputArea, result, statusEl) {
+    inputArea.textContent = result.error
+    toggleState('error', statusEl)
 }
 
 async function main () {
-    // Function fetches for the available tables and displays them. 
-    // Also displays the rows 
-    const tableData = await getAndDisplayTables() 
-    console.log(tableData)
-    await getAndDisplayAttributes(tableData)
+    customQueryForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        toggleState('fetching', customStatusEl)
+        const formData = new FormData(customQueryForm)
+        const result = await customQueryExecutor(formData)
 
-    selectTableEl.addEventListener('change', async () => {
-        await getAndDisplayAttributes(tableData)
+        if (result.success) {
+            successfulQuery(downloadCustomEl, result, customStatusEl)
+        } else {
+            unsuccessfulQuery(downloadCustomEl, result, customStatusEl)
+        }
     })
-
-    tableFormEl.addEventListener('submit', async (e) => {
-        await makeCsvDownloadable(e)
-    })
-
-
 }
 
