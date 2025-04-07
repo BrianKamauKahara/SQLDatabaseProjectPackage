@@ -31,7 +31,8 @@ async function getTables (dbConfig) {
             sys.columns AS a ON t.object_id = a.object_id
         WHERE
             t.is_ms_shipped = 0
-        AND t.name <> 'Users';
+        AND t.name <> 'Users'
+        AND t.name <> 'Admins';
         `)
     
     // Format the tables and attributes into the desired manner

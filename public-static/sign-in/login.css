@@ -77,6 +77,14 @@ body {
     border-radius: 8px;
 }
 
+.role-fs {
+    border: none;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
 .user-name, .password {
     height: 2rem;
     margin: 8px;

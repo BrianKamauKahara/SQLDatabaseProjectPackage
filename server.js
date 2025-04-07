@@ -6,6 +6,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const session = require('express-session')
 
 // Custom Imports (Useful)
 const { connectToDB } = require('./db/db-functions.js')
@@ -27,9 +28,18 @@ app.use((req, res, next) => {
     next()
 })
 app.use(cors())
-app.use(express.static('./public-static'))
 app.use(express.json())
-
+app.use(express.static('./public-static'))
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60
+    }
+}))
 
 // ROUTES
 app.use('/', pageRoutes)
@@ -37,8 +47,6 @@ app.use('/db', dbRoutes)
 app.use('/auth', authRoutes)
 app.use('/docs', docsRoutes)
 
-
-// Page loads
 
 // SERVER
 const port = process.env.SERVER_PORT || 5000

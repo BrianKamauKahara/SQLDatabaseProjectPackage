@@ -17,7 +17,15 @@ async function main() {
         console.log(result)
         if (result) {
             await storeLocalStorage(formData)
-            await navigate('default-user-page')
+            const role = formData.get('role')
+            const page = role === 'admin' ? 'admin-page' : 'default-user-page'
+            console.log(page)
+            const canNavigate = await navigate(page)
+            if (canNavigate) {
+                console.log(page)
+                window.location.href = `/${page}`
+            }
+
         } else {
             errorMessageEl.textContent = 'Incorrect Username or Password!'
         }

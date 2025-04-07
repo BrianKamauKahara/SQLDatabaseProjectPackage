@@ -1,5 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const { 
+    getTables,
+    getDataInAndSaveTable
+} = require('../db/db-functions.js')
+const dbConfig = require('../db/get-admin-details.js')
 
 router.get("/tables/:name/attributes", async (req, res) => {
     const tableName = req.params.name
@@ -16,8 +21,19 @@ router.get("/tables/:name/attributes", async (req, res) => {
     }
 
     try {
+        
         const csvFilePath = await getDataInAndSaveTable(dbConfig, tableName, attributesString)
-        res.status(200).json({ csvFilePath: csvFilePath })
+        if (csvFilePath) {
+            res.status(200).json({ csvFilePath: csvFilePath })
+        } else {
+            res.status(400).json({ // Cleaning up for in case table is empty
+                success: false,
+                data: {
+                    error: "Bad Request",
+                    message: "No attributes selected"
+                }
+            })
+        }
 
     } catch (error) {
         res.status(404).json({

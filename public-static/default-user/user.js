@@ -39,7 +39,7 @@ async function makeCsvDownloadable(e) {
     
     try {
         const csvFilePath = await fetchAndSaveTableData(tableSelected, attributesSelectedString) 
-        downloadAnchor.href = `/csv/${encodeURIComponent(csvFilePath)}`
+        downloadAnchor.href = `/docs/csv/${encodeURIComponent(csvFilePath)}`
         if(downloadSection.classList.contains('hidden')) {
             downloadSection.classList.remove('hidden')
         }
@@ -61,7 +61,7 @@ async function main () {
     })
 
     tableFormEl.addEventListener('submit', async (e) => {
-        makeCsvDownloadable(e)
+        await makeCsvDownloadable(e)
     })
 
 

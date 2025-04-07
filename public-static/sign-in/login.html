@@ -23,6 +23,16 @@
                     <input type="password" class="password" id="password" name="password" required placeholder="password">
                 </fieldset>
 
+                <fieldset class="role-fs">
+                    <label for="default">Default User
+                        <input type="radio" class="default" id="default" name="role" value="default" required checked>
+                    </label>
+                    <label for="admin">Admin
+                        <input type="radio" class="admin" id="admin" name="role" value="admin" required>
+                    </label>
+                    
+                </fieldset>
+
                 <div class="bottom">
                     <p class="error-message" id="error-message"></p>
                     <button class="submit-btn" id="login-btn">Log In</button>

@@ -1,6 +1,9 @@
 export async function fetchExistingTables() {
     try {
-        const response = await fetch('/db/tables')
+        const response = await fetch('/db/tables', {
+            method: 'GET',
+            credentials: 'include'
+        })
         const tableData = await response.json()
         return tableData
     }
@@ -20,7 +23,10 @@ export async function fetchAndSaveTableData(tableName, attributeStr) {
         if(!attributeStr) {
             return null
         }
-        const fetchedCsvFilePath = await fetch(`/db/tables/${tableName}/attributes?attributes=${attributeStr}`)
+        const fetchedCsvFilePath = await fetch(`/db/tables/${tableName}/attributes?attributes=${attributeStr}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
         const { csvFilePath } = await fetchedCsvFilePath.json()
         return csvFilePath
     } catch (error) {
@@ -50,18 +56,20 @@ export async function signUpNewUser(formData) {
     const population = formData.get('population')
     const chairperson = formData.get('chairperson')
     const password = formData.get('password')
-
+    const admin = formData.get('admin')
     const response = await fetch('/auth/sign-up', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
             associationName,
             location,
             population,
             chairperson,
-            password
+            password,
+            admin
         })
     })
 
@@ -73,15 +81,17 @@ export async function signUpNewUser(formData) {
 export async function signInExistingUser(formData) {
     const associationName = formData.get('association-name')
     const password = formData.get('password')
-    //console.log(associationName, password)
+    const role = formData.get('role')
     const response = await fetch('/auth/sign-in', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             associationName,
-            password
+            password,
+            role
         })
     })
 
@@ -101,7 +111,11 @@ export async function signInExistingUser(formData) {
 }
 
 export async function navigate(page) {
-    return await fetch(`/${page}`)
+    const res = await fetch(`/${page}`)
+    if (res.ok) {
+        return true
+    }
+    return false
 }
 export async function storeLocalStorage(heeh) {
     return 0;

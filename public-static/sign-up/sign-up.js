@@ -15,14 +15,23 @@ async function  main() {
         const formData = new FormData(signUpForm)
         const result = await signUpNewUser(formData)
         
-        if (!result.success) {
+        if (result.data.error) {
             alert(' AN ERROR OCCURED WHEN TRYING TO LOG IN! CONTACT AN ADMIN ')
-        }
-        if (!result.data) { // Needs polishing up
-            errorMessageEl.textContent = "Username already taken!"
+            return
+        } 
+        if (!result.success) { 
+            if (result.data.conflict) {
+                errorMessageEl.textContent = "Username already taken!"
+            } else {
+                errorMessageEl.textContent = "Admin Login Wrong!"
+            }
         } else {
             await storeLocalStorage(formData)
-            await navigate('default-user-page')
+            const page = formData.get('admin') ? 'admin-page' : 'default-user-page'
+            const canNavigate = await navigate(page)
+            if (canNavigate) {
+                window.location.href = `/${page}`
+            }
         }
     })
 }
