@@ -25,9 +25,12 @@ async function hashPassword(password) {
     return hash;
 }
 
-async function addAssociationAndGetId(userDetails, pool) {
-    try {
+async function validatePassword(password, correct_hash) {
+    return await bcrypt.compare(password, correct_hash)
+}
 
+async function addAssociationToDb(userDetails, pool) {
+    try {
         const { associationName, location, population, chairperson } = userDetails
         await pool.request()
             .input('location', sql.VarChar, location)
@@ -39,7 +42,7 @@ async function addAssociationAndGetId(userDetails, pool) {
                 VALUES (@location, @associationName, @chairperson, @population);
             `);
     
-        const result = await pool.request()
+        /* const result = await pool.request()
             .input('associationName', sql.VarChar, associationName)
             .input('location', sql.VarChar, location)
             .input('chairperson', sql.VarChar, chairperson)
@@ -51,66 +54,85 @@ async function addAssociationAndGetId(userDetails, pool) {
                 AND ChairPerson = @chairperson
                 AND Population = @population;
             `);
-    
-    
-    
-        return result.recordset
+     */
+        return true
     } catch (error) {
-        return {
-            success: false,
-            data: error
-        }
+        throw error
     }
     
 }
 
-async function removeUser(userDetails) {
-    const pool = await connectToDB(adminDetails)
+async function storeUserInDb(userDetails, pool) {
     try {
-        const { associationName, location, population, chairperson } = userDetails
-    
-        const result = await pool.request()
-            .input('associationName', sql.VarChar, associationName)
-            .input('location', sql.VarChar, location)
-            .input('chairperson', sql.VarChar, chairperson)
-            .input('population', sql.Int, population)
+        const password = await hashPassword(userDetails.password)
+        const associationName  = userDetails.associationName
+
+        await pool.request()
+            .input('association_name', sql.VarChar, associationName )
+            .input('password', sql.Text, password)
             .query(`
-                DELETE FROM ASSOCIATIONS
-                WHERE Association_Name = @associationName
-                AND Location = @location
-                AND ChairPerson = @chairperson
-                AND Population = @population;
-            `);
+                INSERT INTO Users (association_name, password_hash)
+                VALUES (@association_name, @password);
+                `)
+    } catch (error) {
+        throw error
+    }
+}
+
+async function signInDb(userDetails, pool) {
+    try {
+        const password = userDetails.password
+        console.log(password)
+        const associationName  = userDetails.associationName
+        console.log(associationName, password)
+        const result = await pool.request()
+            .input('association_name', sql.VarChar, associationName )
+            .input('password', sql.VarChar, password)
+            .query(`
+                SELECT password_hash FROM Users
+                WHERE association_name =  @association_name;
+                `)
+
+        return await validatePassword(password, result.recordset[0]["password_hash"])
     } catch (error) {
         throw error
     }
 }
 
 async function createNewUser(userDetails) {
-    const password = await hashPassword(userDetails.password)
-    
     try {
         const pool = await connectToDB(adminDetails)
-        const result = await addAssociationAndGetId(userDetails, pool)
-        const associationId = result[0]["Association_ID"]
-        await pool.request() // Prevent SQL injections!
-            .input('association_id', sql.Int, associationId)
-            .input('password_hash', sql.Text, password)
-            .query(`
-            INSERT INTO Users (association_id, password_hash)
-            VALUES (@association_id, @password_hash);
-            `)
-    
-        return { 
-            success: true,
-            data : {
-                associationId: associationId 
-            }
+        const success = await addAssociationToDb(userDetails, pool)
+        if (success) {
+            await storeUserInDb(userDetails, pool)
         }
+        return success
     } catch (error) {
-        await removeUser(userDetails)
-        throw error
+        if (error.name === "RequestError") {
+            return false
+        } else {
+            throw error
+        }
     } 
 }
 
-module.exports = { createNewUser }
+async function signInUser(userDetails) {
+    try {
+        const pool = await connectToDB(adminDetails)
+        const result = await signInDb(userDetails, pool)
+    
+        if (result) {
+            return {
+                    loggedIn: true
+                } 
+        } else {
+            return {
+                    loggedIn: false
+                }
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
+module.exports = { createNewUser, signInUser }

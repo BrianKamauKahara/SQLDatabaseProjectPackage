@@ -28,7 +28,6 @@ export async function fetchAndSaveTableData(tableName, attributeStr) {
     }
 }
 
-
 export function getTableEls(tableData) {
     return tableData.map(table => {
         return `<option class='option' value='${table.tableName}'>${table.tableName}</option>`
@@ -66,13 +65,37 @@ export async function signUpNewUser(formData) {
         })
     })
 
-    const data = await response.json()
+    const result = await response.json()
     
-    if (data.success) {
+    return result
+}
+
+export async function signInExistingUser(formData) {
+    const associationName = formData.get('association-name')
+    const password = formData.get('password')
+    console.log(associationName, password)
+    const response = await fetch('/sign-in', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            associationName,
+            password
+        })
+    })
+
+    const result = await response.json()
+    if (!result.success) {
+        alert(' AN ERROR OCCURED WHEN TRYING TO LOG IN! CONTACT AN ADMIN ')
+        console.log(result.data)
+        throw result.data.error
+    } 
+
+    if (result.data.loggedIn) {
         return true
     } else {
         return false
-        // Future implementation (im tired)
     }
 }
 

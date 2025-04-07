@@ -6,8 +6,9 @@ const path = require('path')
 
 // Custom Imports (Useful)
 const { getTables, getDataInAndSaveTable, connectToDB } = require('./db/db-functions.js')
-const { createNewUser } = require('./db/auth-functions.js')
+const { createNewUser, signInUser } = require('./db/auth-functions.js')
 const { dbConfig } = require('./db/temp.js')
+
 
 // INITIALIZATION
 const app = express()
@@ -76,16 +77,17 @@ app.get("/csv/:location", async (req, res) => {
 
 app.post("/sign-up", async (req, res) => {
     const userDetails = req.body
-    console.log(userDetails)
+    //console.log(userDetails)
     try {
-        const result = await createNewUser(userDetails)
-        res.status(200).json({
-            success: true,
-            data: result
-            })
+        const success = await createNewUser(userDetails)
+        const status = success ? 200 : 409
+        res.status(status).json({
+                success: true,
+                data: success
+        })
+        
     } catch (error) {
-        console.log(error)
-        res.status(404).json({
+        res.status(500).json({
             success: false,
             data: {
                 error: error.name,
@@ -95,6 +97,24 @@ app.post("/sign-up", async (req, res) => {
     }
 })
 
+app.post("/sign-in", async (req, res) => {
+    const loginDetails = req.body
+    try {
+        result = await signInUser(loginDetails)
+        res.status(200).json({
+            success: true,
+            data: result
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            data: {
+                error: error.name,
+                message: error.message
+            }
+        })
+    }
+})
 
 app.get('/server-page', async (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public-static', 'server.html'));

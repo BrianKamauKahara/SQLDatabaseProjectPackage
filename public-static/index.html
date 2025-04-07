@@ -12,9 +12,9 @@
             <form action="" class="form" id="login-form">
                 <h1 class="sign-in">Log In</h1>
                 <fieldset class="user-name-fs">
-                    <legend>Association ID</legend>
-                    <label for="user-name"></label>
-                    <input type="text" class="user-name" id="user-name" name="user-name" required placeholder="User Name">
+                    <legend>Association Name</legend>
+                    <label for="association-name"></label>
+                    <input type="text" class="user-name" id="user-name" name="association-name" required placeholder="User Name">
                 </fieldset>
 
                 <fieldset class="password-fs">
@@ -24,6 +24,7 @@
                 </fieldset>
 
                 <div class="bottom">
+                    <p class="error-message" id="error-message"></p>
                     <button class="submit-btn" id="login-btn">Log In</button>
                     <p class="switch-text">Don't have an account? <a href="/sign-up.html">Sign Up </a></p>
                 </div>

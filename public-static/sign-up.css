@@ -94,6 +94,11 @@ legend {
     place-content: center;
 }
 
+.error-message {
+    font-size: 0.6rem;
+    color: red;
+}
+
 .submit-btn {
     padding: 2px 0;
     margin: 4px;
