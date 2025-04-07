@@ -1,6 +1,5 @@
 const { writeFileSync } = require('fs')
 const { resolve } = require('path')
-
 const sql = require('mssql')
 
 
@@ -31,7 +30,8 @@ async function getTables (dbConfig) {
         JOIN
             sys.columns AS a ON t.object_id = a.object_id
         WHERE
-            t.is_ms_shipped = 0;
+            t.is_ms_shipped = 0
+        AND t.name <> 'Users';
         `)
     
     // Format the tables and attributes into the desired manner

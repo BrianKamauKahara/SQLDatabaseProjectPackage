@@ -4,8 +4,9 @@ const errorMessageEl = document.getElementById('error-message')
 document.addEventListener('DOMContentLoaded', main)
 import {
     signUpNewUser,
-    storeLocalStorage
-} from './ss-functions.js'
+    storeLocalStorage,
+    navigate
+} from '../ss-functions.js'
 
 async function  main() {
     document.addEventListener('DOMContentLoaded', main)
@@ -21,7 +22,7 @@ async function  main() {
             errorMessageEl.textContent = "Username already taken!"
         } else {
             await storeLocalStorage(formData)
-            window.location.href = './server.html'
+            await navigate('default-user-page')
         }
     })
 }

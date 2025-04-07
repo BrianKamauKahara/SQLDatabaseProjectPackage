@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(218, 210, 210);
+}
+
+.nav-form {
+    /* min-height: 80vh; */
+    max-height: 100vh;
+    padding: 20px 10px;
+    /* width: 960px; */
+    display: flex;
+    flex-direction: column;
+    
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 16px;
+}
+

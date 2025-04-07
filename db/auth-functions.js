@@ -1,5 +1,4 @@
-require('dotenv').config()
-const { USER, PASSWORD, SERVER, DATABASE, PORT } = process.env
+const adminDetails = require('./get-admin-details.js')
 
 // Library Imports
 const sql = require('mssql')
@@ -7,17 +6,6 @@ const  bcrypt  = require('bcrypt')
 
 // Other important imports
 const { connectToDB } = require('./db-functions.js')
-const adminDetails = {
-    user: USER,
-    password: PASSWORD,
-    server: SERVER,
-    database: DATABASE,
-    port: parseInt(PORT),
-    options: {
-        encrypt: false,
-        trustServerCertificate: true
-    }
-}
 
 async function hashPassword(password) {
     const saltRounds = 10;
@@ -92,8 +80,12 @@ async function signInDb(userDetails, pool) {
                 SELECT password_hash FROM Users
                 WHERE association_name =  @association_name;
                 `)
-
-        return await validatePassword(password, result.recordset[0]["password_hash"])
+        
+        if (result.recordset.length) {
+            return await validatePassword(password, result.recordset[0]["password_hash"])
+        } else {
+            return false
+        }
     } catch (error) {
         throw error
     }
@@ -117,6 +109,7 @@ async function createNewUser(userDetails) {
 }
 
 async function signInUser(userDetails) {
+    console.log('A ', userDetails)
     try {
         const pool = await connectToDB(adminDetails)
         const result = await signInDb(userDetails, pool)

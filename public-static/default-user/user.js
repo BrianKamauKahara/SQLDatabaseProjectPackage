@@ -10,7 +10,7 @@ import {
     getTableAttributes, 
     getTableEls, 
     getAttributeEls 
-} from './ss-functions.js'
+} from '../ss-functions.js'
 
 document.addEventListener('DOMContentLoaded', main)
 

@@ -1,6 +1,6 @@
 export async function fetchExistingTables() {
     try {
-        const response = await fetch('/tables')
+        const response = await fetch('/db/tables')
         const tableData = await response.json()
         return tableData
     }
@@ -20,7 +20,7 @@ export async function fetchAndSaveTableData(tableName, attributeStr) {
         if(!attributeStr) {
             return null
         }
-        const fetchedCsvFilePath = await fetch(`/tables/${tableName}/attributes?attributes=${attributeStr}`)
+        const fetchedCsvFilePath = await fetch(`/db/tables/${tableName}/attributes?attributes=${attributeStr}`)
         const { csvFilePath } = await fetchedCsvFilePath.json()
         return csvFilePath
     } catch (error) {
@@ -51,7 +51,7 @@ export async function signUpNewUser(formData) {
     const chairperson = formData.get('chairperson')
     const password = formData.get('password')
 
-    const response = await fetch('/sign-up', {
+    const response = await fetch('/auth/sign-up', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -73,8 +73,8 @@ export async function signUpNewUser(formData) {
 export async function signInExistingUser(formData) {
     const associationName = formData.get('association-name')
     const password = formData.get('password')
-    console.log(associationName, password)
-    const response = await fetch('/sign-in', {
+    //console.log(associationName, password)
+    const response = await fetch('/auth/sign-in', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -86,6 +86,7 @@ export async function signInExistingUser(formData) {
     })
 
     const result = await response.json()
+    console.log(result.data)
     if (!result.success) {
         alert(' AN ERROR OCCURED WHEN TRYING TO LOG IN! CONTACT AN ADMIN ')
         console.log(result.data)
@@ -99,6 +100,9 @@ export async function signInExistingUser(formData) {
     }
 }
 
+export async function navigate(page) {
+    return await fetch(`/${page}`)
+}
 export async function storeLocalStorage(heeh) {
     return 0;
 }

@@ -1,7 +1,8 @@
 import {
     signInExistingUser,
-    storeLocalStorage
-} from './ss-functions.js'
+    storeLocalStorage,
+    navigate
+} from '../ss-functions.js'
 
 document.addEventListener('DOMContentLoaded', main)
 const loginForm = document.getElementById('login-form')
@@ -13,10 +14,10 @@ async function main() {
         e.preventDefault()
         const formData = new FormData(loginForm)
         const result = await signInExistingUser(formData)
-        
+        console.log(result)
         if (result) {
             await storeLocalStorage(formData)
-            window.location.href = './server.html'
+            await navigate('default-user-page')
         } else {
             errorMessageEl.textContent = 'Incorrect Username or Password!'
         }
