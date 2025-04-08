@@ -6,7 +6,7 @@ const customQueryForm = document.getElementById('custom-query-form')
 const aiQueryForm = document.getElementById('ai-query-form')
 const downloadCustomEl = document.getElementById('download-custom-btn-container') 
 const downloadAiEl = document.getElementById('download-ai-btn-container') 
-const customInputArea = document.getElementById('custom-query-input')
+const customInputArea = document.getElementById('custom-query')
 const AiInputArea = document.getElementById('ai-query-input')
 const customStatusEl = document.getElementById('query-status-custom')
 const aiStatusEl = document.getElementById('query-status-ai')
@@ -54,7 +54,9 @@ function successfulQuery(downloadEl, result, statusEl) {
 }
 
 function unsuccessfulQuery(inputArea, result, statusEl) {
-    inputArea.textContent = result.error
+    console.log(inputArea)
+    console.log(result.data.message)
+    inputArea.value = result.data.message
     toggleState('error', statusEl)
 }
 
@@ -68,7 +70,7 @@ async function main () {
         if (result.success) {
             successfulQuery(downloadCustomEl, result, customStatusEl)
         } else {
-            unsuccessfulQuery(downloadCustomEl, result, customStatusEl)
+            unsuccessfulQuery(customInputArea, result, customStatusEl)
         }
     })
 }

@@ -17,6 +17,11 @@ body {
     align-items: center;
 
     background-color: rgb(218, 210, 210);
+
+    background-image: url('../tct.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover
 }
 
 .form-container {

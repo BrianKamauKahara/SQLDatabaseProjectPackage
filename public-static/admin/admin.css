@@ -17,6 +17,10 @@ body {
     align-items: center;
 
     background-color: rgb(107, 102, 102);
+    background-image: url('../tct.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover
 }
 
 .body-incontainer {
