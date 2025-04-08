@@ -12,6 +12,7 @@ const { connectToDB } = require('./db-functions.js')
 async function validateAdmins(pas) {
     return pas === process.env.PASSWORD
 }
+
 async function hashPassword(password) {
     const saltRounds = 10;
     const hash = await bcrypt.hash(password, saltRounds);
@@ -140,6 +141,16 @@ async function signInUser(userDetails) {
     } catch (error) {
         throw error
     }
+}
+
+async function queryHuggingFace(inputText) {
+    const response = await fetch('/ai', {
+        method: 'POST',
+        headers: {
+            'ContentType' : 'application/json'
+        },
+        body: JSON.stringify(inputText)
+    })
 }
 
 module.exports = { createNewUser, signInUser }

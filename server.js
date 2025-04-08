@@ -16,7 +16,8 @@ const dbConfig = require('./db/get-admin-details.js')
 const dbRoutes = require('./routes/db.js');
 const authRoutes = require('./routes/auth.js');
 const pageRoutes = require('./routes/page.js');
-const docsRoutes = require('./routes/docs.js') 
+const docsRoutes = require('./routes/docs.js');
+const aiRoutes = require('./routes/ai.js');
 
 
 /* ------ INITIALIZATION ------ */
@@ -46,6 +47,7 @@ app.use('/', pageRoutes)
 app.use('/db', dbRoutes)
 app.use('/auth', authRoutes)
 app.use('/docs', docsRoutes)
+app.use('/ai', aiRoutes)
 
 
 // SERVER

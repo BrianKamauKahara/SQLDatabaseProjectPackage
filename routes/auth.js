@@ -43,7 +43,6 @@ router.post("/sign-in", async (req, res) => {
                 name: loginDetails.associationName, // Needs polishing
                 role: loginDetails.role
             }
-            console.log(req.session)
         }
         res.status(status).json({
             success: true,

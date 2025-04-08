@@ -117,6 +117,7 @@ export async function navigate(page) {
     }
     return false
 }
+
 export async function storeLocalStorage(heeh) {
     return 0;
 }
@@ -140,6 +141,29 @@ export async function customQueryExecutor(formData) {
     })
 
     const data = await result.json()
-    console.log(data)
+    
+    return data
+}
+
+export async function aiQueryExecutor(formData) {
+    const input = formData.get('ai-query').trim()
+
+    if (!input) {
+        return null
+    }
+
+    const result = await fetch('/ai', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            input
+        })
+    })
+
+    const data = await result.json()
+    
     return data
 }
